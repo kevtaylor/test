@@ -1,25 +1,40 @@
+// Uses Declarative syntax to run commands inside a container.
 pipeline {
-
-    options {
-        // Build auto timeout
-        timeout(time: 60, unit: 'MINUTES')
+    agent {
+        kubernetes {
+            // Rather than inline YAML, in a multibranch Pipeline you could use: yamlFile 'jenkins-pod.yaml'
+            // Or, to avoid YAML:
+            // containerTemplate {
+            //     name 'shell'
+            //     image 'ubuntu'
+            //     command 'sleep'
+            //     args 'infinity'
+            // }
+            yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: shell
+    image: ubuntu
+    command:
+    - sleep
+    args:
+    - infinity
+'''
+            // Can also wrap individual steps:
+            // container('shell') {
+            //     sh 'hostname'
+            // }
+            defaultContainer 'shell'
+        }
     }
-
-    // In this example, all is built and run from the master
-    agent { kubernetes {} }
-
-    // Pipeline stages
     stages {
-
-        stage('Test Functionality') {
+        stage('Main') {
             steps {
-
-                // Validate kubectl
-                sh "kubectl cluster-info"
-
-                // Validate helm
-                sh "helm version"
+                sh 'hostname'
             }
         }
     }
 }
+
