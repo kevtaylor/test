@@ -6,7 +6,7 @@ pipeline {
     }
 
     // In this example, all is built and run from the master
-    agent { node { label 'master' } }
+    agent { kubernetes {} }
 
     // Pipeline stages
     stages {
