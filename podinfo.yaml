@@ -5,6 +5,8 @@ metadata:
   namespace: default
 spec:
   chart:
-    repository: https://stefanprodan.github.io/podinfo
     name: podinfo
+    repository: https://stefanprodan.github.io/podinfo
     version: 3.2.0
+  values:
+    replicaCount: 2
