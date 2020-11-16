@@ -4,8 +4,8 @@ pipeline {
     stages {
       stage('Deploy App') {
         steps {
-          script {
-            kubernetesDeploy(configs: "podinfo.yaml", kubeconfigId: "myid")
+          withKubeConfig([credentialsId: 'myid', serverUrl: 'https://192.168.99.100:8443']) {
+            sh 'kubectl apply -f podinfo.yaml'
           }
         }
       }
