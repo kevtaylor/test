@@ -1,15 +1,17 @@
 pipeline {
-    agent {
-        kubernetes {
-            yamlFile 'podinfo.yaml'
-        }
-    }
     stages {
-        stage('Main') {
-            steps {
-                sh 'hostname'
-            }
+      stage('Deploy App') {
+        steps {
+          script {
+            kubernetesDeploy(configs: "podinfo.yaml", kubeconfigId: "myid")
+          }
         }
+      }
+      stage('Main') {
+        steps {
+          sh 'hostname'
+        }
+      }
     }
 }
 
